@@ -2,7 +2,6 @@
 import { User, CurrencyDollar } from 'phosphor-react';
 import { useState } from 'react';
 import { Button } from '../components/Button';
-import { Checkbox } from '../components/Checkbox';
 import { Heading } from '../components/Heading';
 import Logo from '../components/Logo';
 import { Text } from '../components/Text';

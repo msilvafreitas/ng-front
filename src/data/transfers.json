@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "type": "in",
+        "user": "John",
+        "value": 30,
+        "date": "2022-10-03"
+    },
+    {
+        "id": 2,
+        "type": "out",
+        "user": "Anna",
+        "value": 120,
+        "date": "2022-10-01"
+    }
+]

@@ -20,7 +20,7 @@ export default function Account() {
 
   const [transferAccount, setTransferAccount] = useState('')
   const [transferValue, setTransferValue] = useState<Number>(0)
-  const account: typeof users[0] = users.find(item => item.id === Number(pid));
+  const account: typeof users[0] = users.find(item => item.id === Number(pid))!;
 
   function transfer(event: FormEvent) {
     event.preventDefault()

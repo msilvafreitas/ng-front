@@ -11,6 +11,7 @@ import transfers from '../../data/transfers.json';
 import users from '../../data/users.json';
 import { useRouter } from 'next/router';
 import { NumberInput } from '../../components/NumberInput';
+import { ToastContainer, toast } from 'react-toast'
 
 
 
@@ -29,6 +30,7 @@ export default function Account() {
     if (checkUser) {
       if (transferValue > account.balance) {
         console.log("Insuficient funds")
+        toast.error("Oops! You don't have sufficient funds to make this transfer")
       }
       else {
         const newTransfer = {
@@ -43,10 +45,12 @@ export default function Account() {
         checkUser.balance = Number(checkUser.balance + Number(transferValue))
         setTransferValue(0);
         setTransferAccount('');
+        toast.success("Transfer sent successfully!")
       }
     }
     else {
       console.log("User doesnt exist")
+      toast.error("Oops! Invalid user")
     }
   }
 
@@ -56,6 +60,7 @@ export default function Account() {
 
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100 lg:grid lg:grid-cols-2'>
+      <ToastContainer delay={3000} />
       <header className='flex flex-col items-center lg:col-span-1'>
         <div className='w-28'>
           <Logo />

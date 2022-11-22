@@ -8,6 +8,7 @@ import users from '../data/users.json';
 
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { ToastContainer, toast } from 'react-toast'
 
 
 
@@ -33,16 +34,19 @@ export default function Home() {
       }
       else {
         console.log("Wrong password")
+        toast.error("Oops! Wrong password.")
       }
     }
     else {
       console.log("user doesn't exist")
+      toast.error("Oops! Invalid user.")
     }
   }
 
 
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100'>
+      <ToastContainer delay={3000} />
       <header className='flex flex-col items-center'>
         <Logo />
         <Text size='lg' className='text-gray-400 mt-4'>

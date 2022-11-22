@@ -6,6 +6,7 @@ import { TextInput } from '../components/TextInput';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import users from '../data/users.json';
+import { ToastContainer, toast } from 'react-toast'
 
 
 export default function Create() {
@@ -23,6 +24,7 @@ export default function Create() {
     const user = users.find(checkUser)
     if (user) {
       console.log("user already exist")
+      toast.error("Oops! User already exist.")
     }
     else {
       if (password.length > 5) {
@@ -41,12 +43,14 @@ export default function Create() {
       }
       else {
         console.log("Password must be at least 6 characters long")
+        toast.error("Password must be at least 6 characters long")
       }
     }
   }
 
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100'>
+      <ToastContainer delay={3000} />
       <header className='flex flex-col items-center'>
         <Logo />
         <Text size='lg' className='text-gray-400 mt-4'>

@@ -1,15 +1,13 @@
 [
     {
-        "id": 1,
-        "type": "in",
-        "user": "John",
+        "from": 1,
+        "to": 2,
         "value": 30,
         "date": "2022-10-03"
     },
     {
-        "id": 2,
-        "type": "out",
-        "user": "Anna",
+        "from": 2,
+        "to": 3,
         "value": 120,
         "date": "2022-10-01"
     }

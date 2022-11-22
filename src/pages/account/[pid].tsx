@@ -1,20 +1,23 @@
 
 import { User, CurrencyDollar } from 'phosphor-react';
 import { useState } from 'react';
-import { Button } from '../components/Button';
-import { Heading } from '../components/Heading';
-import Logo from '../components/Logo';
-import { Text } from '../components/Text';
-import { TextInput } from '../components/TextInput';
-import { Transfer } from '../components/Transfer';
-import transfers from '../data/transfers.json';
-import Link from 'next/link';
+import { Button } from '../../components/Button';
+import { Heading } from '../../components/Heading';
+import Logo from '../../components/Logo';
+import { Text } from '../../components/Text';
+import { TextInput } from '../../components/TextInput';
+import { Transfer } from '../../components/Transfer';
+import transfers from '../../data/transfers.json';
+import users from '../../data/users.json';
+import { useRouter } from 'next/router';
 
 
 
 export default function Account() {
-
+  const router = useRouter()
+  const { pid } = router.query
   const [list, setList] = useState(transfers);
+  const account: typeof users[0] = users.find(item => item.id === Number(pid));
 
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100 lg:grid lg:grid-cols-2'>
@@ -23,13 +26,13 @@ export default function Account() {
           <Logo />
         </div>
         <Heading className='mt-4'>
-          Welcome <span className='text-ngpink'>User</span> !
+          Welcome <span className='text-ngpink'>{account.username}</span> !
         </Heading>
         <Text size='lg' className='text-gray-400 mt-4'>
           Your account balance is:
         </Text>
         <Heading size='lg' className='mt-4'>
-          R$ 100,00
+          R$ {(account.balance).toFixed(2)}
         </Heading>
       </header>
 
@@ -58,22 +61,27 @@ export default function Account() {
           Transfer
         </Button>
       </form>
-      <div className='flex flex-col items-center gap-3 lg:col-span-2'>
+      <div className='flex flex-col justify-between max-w-xl gap-3 lg:col-span-2'>
         <Heading className='mt-4'>
           Transfer history:
         </Heading>
         {list.map(item => (
-          <div key={item.id}>
-            <Transfer key={item.id} {...item} />
+          <div >
+            <Transfer {...item} />
           </div>
         ))}
       </div>
       <footer className='flex flex-col items-center gap-4 mt-8 lg:col-span-2'>
-        <Link href="/">
-          <Text asChild size='md'>
-            <a href="#" className='text-gray-400 underline hover:text-gray-200'>Logout</a>
-          </Text>
-        </Link>
+
+        <Text asChild size='md'>
+          <a
+            href="#"
+            className='text-gray-400 underline hover:text-gray-200'
+            onClick={() => router.push('/')}
+          >
+            Logout</a>
+        </Text>
+
       </footer>
     </div>
 

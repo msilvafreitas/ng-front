@@ -3,10 +3,48 @@ import { Button } from '../components/Button';
 import Logo from '../components/Logo';
 import { Text } from '../components/Text';
 import { TextInput } from '../components/TextInput';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FormEvent, useState } from 'react';
+import users from '../data/users.json';
 
 
 export default function Create() {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const router = useRouter()
+
+  function checkUser(user: typeof users[0]) {
+    return user.username === username
+  }
+
+  function create(event: FormEvent) {
+    event.preventDefault()
+    const user = users.find(checkUser)
+    if (user) {
+      console.log("user already exist")
+    }
+    else {
+      if (password.length > 5) {
+        console.log("Account created!")
+        const newUser = {
+          id: (users.length)+1,
+          username: username,
+          password: password,
+          balance: 100
+        }
+        users.push(newUser)
+        router.push({
+          pathname: '/account/[pid]',
+          query: { pid: newUser.id },
+        })
+      }
+      else {
+        console.log("Password must be at least 6 characters long")
+      }
+    }
+  }
+
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100'>
       <header className='flex flex-col items-center'>
@@ -23,7 +61,12 @@ export default function Create() {
             <TextInput.Icon>
               <User />
             </TextInput.Icon>
-            <TextInput.Input id='user' placeholder='Type your user' />
+            <TextInput.Input
+              id='user'
+              placeholder='Type your user'
+              value={username}
+              onChange={event => setUsername(event.target.value)}
+            />
           </TextInput.Root>
         </label>
         <label htmlFor="password" className='flex flex-col gap-3'>
@@ -32,22 +75,33 @@ export default function Create() {
             <TextInput.Icon>
               <Lock />
             </TextInput.Icon>
-            <TextInput.Input id='password' type='password' placeholder='********' />
+            <TextInput.Input
+              id='password'
+              type='password'
+              placeholder='********'
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+            />
           </TextInput.Root>
         </label>
 
-        <Link href="/account">
-          <Button type='submit' className='mt-4'>
-            Create Account
-          </Button>
-        </Link>
+
+        <Button type='submit' className='mt-4' onClick={create}>
+          Create Account
+        </Button>
+
       </form>
       <footer className='flex flex-col items-center gap-4 mt-8'>
-        <Link href="/">
-          <Text asChild size='md'>
-            <a href="#" className='text-gray-400 underline hover:text-gray-200'>Back</a>
-          </Text>
-        </Link>
+
+        <Text asChild size='md'>
+          <a
+            className='text-gray-400 underline hover:text-gray-200'
+            onClick={() => router.push('/')}
+          >
+            Back
+          </a>
+        </Text>
+
       </footer>
     </div>
 

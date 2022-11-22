@@ -1,6 +1,6 @@
 
 import { User, CurrencyDollar } from 'phosphor-react';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Heading';
 import Logo from '../../components/Logo';
@@ -10,14 +10,49 @@ import { Transfer } from '../../components/Transfer';
 import transfers from '../../data/transfers.json';
 import users from '../../data/users.json';
 import { useRouter } from 'next/router';
+import { NumberInput } from '../../components/NumberInput';
 
 
 
 export default function Account() {
   const router = useRouter()
   const { pid } = router.query
-  const [list, setList] = useState(transfers);
+
+  const [transferAccount, setTransferAccount] = useState('')
+  const [transferValue, setTransferValue] = useState<Number>(0)
   const account: typeof users[0] = users.find(item => item.id === Number(pid));
+
+  function transfer(event: FormEvent) {
+    event.preventDefault()
+    const today = new Date();
+    const checkUser = users.find(element => element.username === transferAccount)
+    if (checkUser) {
+      if (transferValue > account.balance) {
+        console.log("Insuficient funds")
+      }
+      else {
+        const newTransfer = {
+          id: Number(transfers.length + 1),
+          from: account.username,
+          to: transferAccount,
+          value: Number(transferValue),
+          date: `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear().toString().slice(-2)}`
+        }
+        transfers.push(newTransfer)
+        account.balance = Number(account.balance - Number(transferValue))
+        checkUser.balance = Number(checkUser.balance + Number(transferValue))
+        setTransferValue(0);
+        setTransferAccount('');
+      }
+    }
+    else {
+      console.log("User doesnt exist")
+    }
+  }
+
+
+  const transfersIn = transfers.filter(transfer => transfer.to === account.username)
+  const transfersOut = transfers.filter(transfer => transfer.from === account.username)
 
   return (
     <div className='w-screen h-screen bg-[#090B0C] flex flex-col items-center justify-center text-gray-100 lg:grid lg:grid-cols-2'>
@@ -43,31 +78,53 @@ export default function Account() {
             <TextInput.Icon>
               <User />
             </TextInput.Icon>
-            <TextInput.Input id='user' placeholder='Type the user' />
+            <TextInput.Input
+              id='user'
+              placeholder='Type the user'
+              value={transferAccount}
+              onChange={event => setTransferAccount(event.target.value)}
+            />
           </TextInput.Root>
         </label>
         <label htmlFor="value" className='flex flex-col gap-3'>
           <Text className='font-semibold'>Value:</Text>
-          <TextInput.Root>
-            <TextInput.Icon>
+          <NumberInput.Root>
+            <NumberInput.Icon>
               <CurrencyDollar />
-            </TextInput.Icon>
-            <TextInput.Input id='value' type='number' placeholder='Insert the value' />
-          </TextInput.Root>
+            </NumberInput.Icon>
+            <NumberInput.Input
+              id='value'
+              type='number'
+              placeholder='Insert the value'
+              value={Number(transferValue)}
+              onChange={event => setTransferValue(Number(event.target.value))}
+            />
+          </NumberInput.Root>
         </label>
 
 
-        <Button type='submit' className='mt-4'>
+        <Button type='submit' className='mt-4' onClick={transfer}>
           Transfer
         </Button>
       </form>
-      <div className='flex flex-col justify-between max-w-xl gap-3 lg:col-span-2'>
+      <div className='flex flex-col max-w-xl lg:ml-96 gap-3 lg:col-span-2'>
         <Heading className='mt-4'>
           Transfer history:
         </Heading>
-        {list.map(item => (
-          <div >
-            <Transfer {...item} />
+        <Heading className='mt-4'>
+          In:
+        </Heading>
+        {transfersIn.map(item => (
+          <div key={item.id}>
+            <Transfer key={item.id} {...item} />
+          </div>
+        ))}
+        <Heading className='mt-4'>
+          Out:
+        </Heading>
+        {transfersOut.map(item => (
+          <div key={item.id}>
+            <Transfer key={item.id} {...item} />
           </div>
         ))}
       </div>

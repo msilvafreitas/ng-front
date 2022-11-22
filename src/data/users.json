@@ -10,5 +10,11 @@
         "username": "Anna",
         "password": "Annapass21",
         "balance": 3000
+    },
+    {
+        "id": 3,
+        "username": "Mark",
+        "password": "Markpass3",
+        "balance": 100
     }
 ]

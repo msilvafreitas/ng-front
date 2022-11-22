@@ -1,14 +1,16 @@
 [
     {
-        "from": 1,
-        "to": 2,
+        "id": 1,
+        "from": "John",
+        "to": "Anna",
         "value": 30,
-        "date": "2022-10-03"
+        "date": "03/10/22"
     },
     {
-        "from": 2,
-        "to": 3,
+        "id": 2,
+        "from": "Anna",
+        "to": "Mark",
         "value": 120,
-        "date": "2022-10-01"
+        "date": "25/10/22"
     }
 ]
